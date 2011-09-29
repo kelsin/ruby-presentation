@@ -1,0 +1,357 @@
+\usepackage{color}
+\usepackage{float}
+\usepackage{minted}
+
+\input xy
+\xyoption{all}
+
+\usepackage{beamerthemesplit}
+\usetheme{Darmstadt}
+\usecolortheme{crane}
+
+\setbeamercovered{dynamic}
+
+\title{Ruby: Why We Love It}
+\subtitle{https://github.com/Kelsin/ruby-presentation}
+\author{Christopher Giroir}
+\date{October 4th, 2011}
+
+% Commands
+\newminted{ruby}{gobble=4,linenos,frame=leftline}
+\newminted{scheme}{gobble=4,linenos,frame=leftline}
+\newminted[console]{bash}{gobble=4,linenos,frame=leftline}
+\usemintedstyle{tango}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+\section{The Language}
+
+\subsection{Basics}
+
+\begin{frame}
+  \frametitle{Overview}
+  \begin{itemize}
+  \item Inspired by Smalltalk (which I love)
+  \pause
+  \item Also draws from Perl, Eiffel, Ada and LISP
+  \pause
+  \item Includes a REPL
+  \pause
+  \item Built for developers as a language they would love to use
+  \pause
+  \item Dynamic, strict, reflective, object oriented
+  \pause
+  \item Everything is an expression (even statements)
+  \pause
+  \item Everything is executed imperatively (even declarations)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Object Oriented}
+  \begin{itemize}
+  \item Everything is an object
+  \pause
+  \item Single Inheritance
+  \pause
+  \item Modules can be mixed in
+  \pause
+  \item Dynamic Dispatch
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Simple Code}
+  \begin{rubycode}
+    5.times { print "Hello" }
+  \end{rubycode}
+  \pause
+  This outputs:
+  \begin{console}
+    Hello
+    Hello
+    Hello
+    Hello
+    Hello
+    => 5
+  \end{console}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Types}
+  \begin{rubycode}
+    # Strings
+    s = 'Testing'
+
+    # Interpreted Strings
+    t = "Double #{str}"
+
+    # Keywords
+    k = :chris
+
+    # Arrays
+    a = [1,2,3]
+
+    # Hashes
+    h = { :key => 'value', :chris => 'awesome' }
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Classes}
+  \begin{rubycode}
+    class Box
+      def initialize(w,h,d)
+        @width = w
+        @height = h
+        @depth = d
+      end
+
+      def volume
+        @width * @height * @depth
+      end
+    end
+
+    box = Box.new(2,2,2)
+    box.volume # => 8
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Simple Inheritance}
+  \begin{rubycode}
+    class JackInTheBox < Box
+      def initialize(msg)
+        @msg = msg
+        super(3,3,3)
+      end
+
+      def open
+        puts @msg
+      end
+    end
+
+    jbox = JackInTheBox.new('Surprise!')
+    jbox.volume # => 27
+    jbox.open # prints 'Surprise!'
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Control}
+  \begin{rubycode}
+    while true == false
+      if var == 5
+        break
+      end
+
+      begin
+        var - 1
+      end while var < 4
+
+      next if var == 6
+    end
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Blocks}
+  \begin{rubycode}
+    [1,2,3].each { |n| puts n }
+  \end{rubycode}
+  \pause
+  This outputs:
+  \begin{console}
+    1
+    2
+    3
+    => [1,2,3]
+  \end{console}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Block Syntax}
+  \begin{rubycode}
+    5.upto(10) { |n| puts n }
+  \end{rubycode}
+
+  This is exactly the same as the following:
+
+  \begin{rubycode}
+    5.upto(10) do |n|
+      puts n
+    end
+  \end{rubycode}
+\end{frame}
+
+\subsection{Why We Love It}
+
+\begin{frame}[fragile]
+  \frametitle{Attribute Methods}
+  \begin{rubycode}
+    class Person
+      def name
+        @name
+      end
+      def social=(s)
+        @social = s
+      end
+      def age
+        @age
+      end
+      def age=(a)
+        @age = a
+      end
+    end
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{The Easy Way}
+  \begin{rubycode}
+    class Person
+      attr_reader :name
+      attr_writer :social
+      attr_accessor :age
+    end
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Why Blocks}
+  \begin{schemecode}
+    (map (lambda (n)
+           (+ n 5))
+         '(1 2 3))
+  \end{schemecode}
+  Becomes:
+  \begin{rubycode}
+    [1,2,3].map do |n|
+      n + 5
+    end
+  \end{rubycode}
+  Results in:
+  \begin{console}
+    => [6,7,8]
+  \end{console}
+\end{frame}
+
+\subsection{Gems}
+
+\begin{frame}[fragile]
+  \frametitle{Modules}
+  \begin{rubycode}
+    module Voice
+      def say(msg)
+        puts msg
+      end
+    end
+
+    class Person
+      include Voice
+    end
+
+    p = Person.new
+    p.say('Hello') # prints 'Hello'
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Using Gems}
+  Require loads in files
+  \begin{rubycode}
+    require 'saver' # pulls in 'saver.rb'
+  \end{rubycode}
+  Gems allow us to not deal with paths
+  \begin{rubycode}
+    require 'rubygems'
+    require 'saver'
+
+    class Item
+      include Saver
+    end
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Writing Gems}
+  \begin{rubycode}
+    Gem::Specification.new do |s|
+      s.name        = "saver"
+      s.version     = Saver::VERSION
+      s.authors     = ["Christopher Giroir"]
+      s.email       = ["kelsin@valefor.com"]
+      s.homepage    = "http://kelsin.github.com/saver/"
+
+      s.files         = `git ls-files`.split("\n")
+      s.require_paths = ["lib"]
+
+      s.add_dependency 'activesupport', '~> 3.0.0'
+      s.add_dependency 'mongo_mapper'
+    end
+  \end{rubycode}
+\end{frame}
+
+\section{Tools}
+
+\subsection{Bundler}
+
+\begin{frame}
+  \frametitle{Why Bundler?}
+  \begin{itemize}
+  \item Many projects (i.e. rails apps) are not gems themselves
+  \item They do have gem dependencies
+  \pause
+  \item Easy way to install and keep track of these dependencies
+  \pause
+  \item Making sure ONLY the proper gems are used
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{The Gemfile}
+  \begin{rubycode}
+    source 'http://tools1.savewave.com/rubygems'
+    source 'http://rubygems.org'
+
+    gem 'rails', '3.0.7'
+
+    gem 'sw-model', '0.13.0'
+
+    group :development, :test do
+      gem "rspec"
+    end
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Using Bundler}
+  \begin{console}
+    # Install the gems from the Gemfile
+    bundle install
+
+    # Update gems to new versions
+    bundle update
+
+    # Execute command with proper gems
+    bundle exec rake spec
+  \end{console}
+  In your ruby code
+  \begin{rubycode}
+    require "rubygems"
+    require "bundler/setup"
+    require "saver"
+  \end{rubycode}
+\end{frame}
+
+\end{document}
