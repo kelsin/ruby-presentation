@@ -228,6 +228,41 @@
 \end{frame}
 
 \begin{frame}[fragile]
+  \frametitle{The Easy Way Explained}
+  \begin{rubycode}
+    class Person
+      attr_reader :name
+      attr_writer :social
+      attr_accessor :age
+    end
+  \end{rubycode}
+  \begin{itemize}
+  \item Ruby syntax allows method calls without ()
+  \pause
+  \item Result is clean and looks like a language feature
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{itemize}
+  \item We can implement this ourselves
+  \pause
+  \item Untested code, please do not copy:
+  \end{itemize}
+  \begin{rubycode}
+    class Object
+      def self.attr_reader(var)
+        class_eval <<-METHODS
+          def #{var}
+            @#{var}
+          end
+    METHODS
+      end
+    end
+  \end{rubycode}
+\end{frame}
+
+\begin{frame}[fragile]
   \frametitle{Why Blocks}
   \begin{schemecode}
     (map (lambda (n)
