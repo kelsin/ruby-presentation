@@ -354,4 +354,81 @@
   \end{rubycode}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Gemfile.lock}
+  \begin{itemize}
+  \item When you initially install versions are saved to Gemfile.lock
+  \pause
+  \item After they are only updated on bundle update
+  \pause
+  \item SHOULD be checked into version control
+  \item Protects from version updates
+  \end{itemize}
+\end{frame}
+
+\subsection{RVM}
+
+\begin{frame}[fragile]
+  \frametitle{Why RVM?}
+  \begin{itemize}
+  \item Different projects might use different versions of rails
+  \pause
+  \item Different projects might use different ruby interpreters
+    \begin{itemize}
+    \item Ruby
+    \item JRuby
+    \item Rubinus
+    \end{itemize}
+  \pause
+  \item While bundler helps, complete gem isolation is better!
+  \pause
+  \item It's nice to keep your system ruby separate and not update it
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Using RVM}
+  \begin{console}
+    # Install the default 1.9.2 ruby interpretor
+    rvm install 1.9.2
+
+    # Switch to using 1.9.2
+    rvm use 1.9.2
+
+    # List installed rubies
+    rvm list
+  \end{console}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{RVM Gemsets}
+  \begin{console}
+    # Create a new gemset
+    rvm gemset create savingstar-web
+
+    # List gemsets
+    rvm gemset list
+
+    # Switch to a ruby and gemset together
+    rvm use 1.9.2@savingstar-web
+  \end{console}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{.rvmrc}
+  \begin{itemize}
+  \item A .rvmrc file per project allows you to say which ruby and gemset to use
+  \pause
+  \item Should be in source control. Helps RVM users out, ignored for others
+  \pause
+  \item It's a shell script that's executed everytime you cd (very unsafe)
+  \pause
+  \item Makes life very easy however!
+  \end{itemize}
+  \pause
+  \begin{rubycode}
+    rvm use 1.9.2@saveingstar-web --create
+  \end{rubycode}
+\end{frame}
+
 \end{document}
